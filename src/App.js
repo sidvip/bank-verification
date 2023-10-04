@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+import { createContext, useState } from 'react';
 import './App.css';
+import BankDetails from './screens/screen-one';
+import ProcessingDetails from './screens/screen-two';
+
+export const FormContext = createContext({});
 
 function App() {
+  const [formData, setFormContextData] = useState({});
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <FormContext.Provider value={setFormContextData}>
+        {Object.keys(formData).length === 0 ?
+          <BankDetails /> :
+          <ProcessingDetails formData={formData} />}
+      </FormContext.Provider>
     </div>
   );
 }
