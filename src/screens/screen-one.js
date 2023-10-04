@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./common.css";
 import InputBox from "./input-box";
 import { FormContext } from "../App";
@@ -8,6 +8,11 @@ export default function BankDetails() {
     const [isInvalid, setInvalid] = useState(new Set(["accountHolderName", "accountNumber", "ifscCode"]));
     const setFormContextData = useContext(FormContext);
     const [ifscDetails, setIfscDetails] = useState({});
+
+    useEffect(() => {
+        setFormContextData({});
+    }, []);
+
     const VALIDATION_WARNINGS = {
         ifscCode: "Please enter valid IFSC code",
         accountNumber: "Please enter 9 to 18 digits account number",
