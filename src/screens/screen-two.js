@@ -1,6 +1,7 @@
-import BankJpeg from './bank.svg';
-import BankGreen from './bank-green.svg';
-import CheckGreen from './check.svg';
+import "./css/screen-two.css";
+import BankJpeg from './img/bank.svg';
+import BankGreen from './img/bank-green.svg';
+import CheckGreen from './img/check.svg';
 import { useEffect, useState } from 'react';
 
 export function BankIcon() {

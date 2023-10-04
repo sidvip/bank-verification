@@ -1,5 +1,4 @@
-import "./common.css"
-
+import "../css/input-box.css";
 export default function InputBox({ value, onChange, label, validation, id, placeholder, subLabel }) {
 
     return (

@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./common.css";
-import InputBox from "./input-box";
+import "./css/screen-one.css";
+import InputBox from "./component/input-box";
 import { FormContext } from "../App";
 import { BankIcon } from "./screen-two";
 export default function BankDetails() {
-    const [formData, setFormData] = useState({ ifscCode: "", accountNumber: "", accountHolderName: "" });
+
+    const INITIAL_STATE = { ifscCode: "", accountNumber: "", accountHolderName: "" };
+    const [formData, setFormData] = useState(INITIAL_STATE);
     const [isInvalid, setInvalid] = useState(new Set(["accountHolderName", "accountNumber", "ifscCode"]));
     const setFormContextData = useContext(FormContext);
     const [ifscDetails, setIfscDetails] = useState({});
 
     useEffect(() => {
-        setFormContextData({});
+        setFormData(INITIAL_STATE);
     }, []);
 
     const VALIDATION_WARNINGS = {
@@ -53,9 +55,10 @@ export default function BankDetails() {
     }
 
     async function fetchBankDetails(ifsc) {
-        const response = await fetch(`http://ifsc.razorpay.com/${ifsc}`);
-        const data = await response.json();
-        return data;
+        fetch(`http://ifsc.razorpay.com/${ifsc}`)
+            .then(response => response.json())
+            .then(setIfscDetails)
+            .catch(() => setIfscDetails({}));
     }
 
     function setBankDetails(e, key, validator) {
@@ -66,12 +69,7 @@ export default function BankDetails() {
             invalidEntries.delete(key);
             setInvalid(invalidEntries);
             if (key === "ifscCode") {
-                fetchBankDetails(value).then((response) => {
-                    setIfscDetails(response);
-                }).catch((err) => {
-                    setIfscDetails({});
-                    // console.log(err);
-                })
+                fetchBankDetails(value);
             }
         } else {
             const invalidEntries = new Set(isInvalid);
@@ -82,7 +80,7 @@ export default function BankDetails() {
 
     function onSubmit(e) {
         e.preventDefault();
-        console.log(formData);
+        // console.log(formData);
         setFormContextData(formData);
     }
 
@@ -97,7 +95,7 @@ export default function BankDetails() {
                 ))
             }
             {
-                Object.keys(ifscDetails).length > 0 && isInvalid.size === 0 ?
+                Object.keys(ifscDetails).length > 0 && !isInvalid.has("ifscCode") ?
                     <div className="ifsc-bank-details">
                         <span>{ifscDetails.BANK}, {ifscDetails.BRANCH}</span>
                         <span>{ifscDetails.CITY}, {ifscDetails.STATE}</span>
